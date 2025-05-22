@@ -1,7 +1,39 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { supabase } from "@/lib/supabaseClient";
 import { Header, Footer } from "@/app/components";
 import Link from "next/link";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+
+    toast.success("Login successful! Redirecting...");
+    setLoading(false);
+    router.push("/dashboard");
+  };
   return (
     <div>
       <Header />
@@ -10,25 +42,38 @@ export default function Login() {
           <div className="mb-10">
             <h1 className="lg:text-5xl text-4xl font-bold">Login 🔒</h1>
             <p className="font-normal text-sm mt-2">
-              Welcome back to MK Blog, login to continue
+              Welcome back to bloggy, login to continue
             </p>
           </div>
-          <form className="space-y-5 relative">
+          <form onSubmit={handleLogin} className="space-y-5 relative">
             <input
               type="email"
               placeholder="Email Address"
               className="border-3 border-[#e1d1ff7a] p-2 rounded-lg w-full outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
               className="border-3 border-[#e1d1ff7a] p-2 rounded-lg w-full outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="submit"
+              disabled={loading}
               className="lg:flex justify-center items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3 w-full "
             >
-              Login <i class="fas fa-user-plus ms-1"></i>
+              {loading ? (
+                <>
+                  Logging In... <i class="fas fa-spinner fa-spin ms-1"></i>
+                </>
+              ) : (
+                <>
+                  Login <i class="fas fa-user-plus ms-1"></i>
+                </>
+              )}
             </button>
           </form>
           <p className="font-light text-xs text-center mt-10 text-gray-300">

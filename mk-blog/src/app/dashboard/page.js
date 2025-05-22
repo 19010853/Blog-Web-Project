@@ -5,7 +5,6 @@ import { Header, Footer } from "../components";
 import { defaultArticle, defaultAvatar } from "../components/images";
 import Image from "next/image";
 import Link from "next/link";
-import { formatDate } from "@/lib/utils";
 
 export default function page() {
   const articles = [
@@ -277,8 +276,7 @@ export default function page() {
                       <p className="text-md">{article?.title}</p>
                       <div className="flex gap-4">
                         <p className="text-xs text-gray-500">
-                          <i className="fas fa-calendar me-1"></i>{" "}
-                          {formatDate(article?.date_created)}
+                          <i className="fas fa-calendar me-1"></i> 15/01/2004
                         </p>
                         <p className="text-xs text-gray-500">
                           <i className="fas fa-eye me-1"></i> {article?.views}

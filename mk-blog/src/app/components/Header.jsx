@@ -1,12 +1,14 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   Menubar,
   MenubarContent,
-  MenubarTrigger,
-  MenubarMenu,
   MenubarItem,
-} from "../../../src/components/ui/menubar";
+  MenubarMenu,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
 import {
   Dialog,
   DialogClose,
@@ -24,13 +26,69 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { defaultArticle } from "./images";
-
+import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 const Header = () => {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const handleLogout = async () => {
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error(error.message);
+        toast.error("Logout failed");
+        setLoading(false);
+        return;
+      }
+
+      toast.success("Logged out successfully");
+      router.push("/auth/login");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+      setLoading(false);
+    }
+  };
   return (
     <div>
+      <Image
+        width={500}
+        height={500}
+        src="/assets/elements/top-bar.png"
+        className="w-[130rem] absolute top-[-20px] -z-1"
+        alt=""
+      />
+      <Image
+        width={500}
+        height={500}
+        src="/assets/elements/orangeblob-right-1.png"
+        className="w-[50rem] absolute right-0 top-[150px] -z-1"
+        alt=""
+      />
+      <Image
+        width={500}
+        height={500}
+        src="/assets/elements/mesh-blob.png"
+        className="w-[50rem] absolute right-0 left-0 mx-auto lg:top-[15rem] -z-1"
+        alt=""
+      />
+      <Image
+        width={500}
+        height={500}
+        src="/assets/elements/purple-blob-left1.png"
+        className="w-[50rem] absolute -left-[5rem] lg:top-[10rem] -z-1"
+        alt=""
+      />
       <header className="flex flex-row justify-between items-center bg-indigo-800 my-5 mx-5 lg:mx-33 px-2 py-4 rounded-full">
         <Link href="/">
-          <h1 className="text-2xl lg:text-3xl font-bold ms-3">MK Blog</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold ms-3">Bloggy</h1>
         </Link>
         <Menubar
           className={
@@ -76,7 +134,7 @@ const Header = () => {
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
-        {/* Bookmark */}
+        {/* Bookmarked Section */}
         <div className="flex gap-4 items-center">
           <Dialog>
             <DialogTrigger asChild={true}>
@@ -174,12 +232,30 @@ const Header = () => {
             </DialogContent>
           </Dialog>
 
-          <Link
-            href="/auth/login"
-            className="hidden lg:flex items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3"
-          >
-            Login <i className="fas fa-sign-in-alt ms-1"></i>
-          </Link>
+          {user ? (
+            <button
+              disabled={loading}
+              onClick={handleLogout}
+              className="hidden lg:flex items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3"
+            >
+              {loading ? (
+                <>
+                  Logging Out <i className="fas fa-spinner fa-spin me-1"></i>
+                </>
+              ) : (
+                <>
+                  <i className="fas fa-sign-out-alt me-1"></i> Logout
+                </>
+              )}
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              className="hidden lg:flex items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3"
+            >
+              Login <i className="fas fa-sign-in-alt ms-1"></i>
+            </Link>
+          )}
 
           <Sheet>
             <SheetTrigger className="lg:hidden" asChild={true}>
@@ -189,7 +265,7 @@ const Header = () => {
               className={`bg-[#07050D] border border-[#110c1f] text-white`}
             >
               <SheetHeader>
-                <SheetTitle className={"text-white"}>MK Blog</SheetTitle>
+                <SheetTitle className={"text-white"}>Bloggy</SheetTitle>
               </SheetHeader>
 
               <ul className="ms-2 space-y-7">
