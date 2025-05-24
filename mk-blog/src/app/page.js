@@ -1,123 +1,138 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Header, Footer, Category } from "@/app/components/index";
 import { defaultArticle, defaultAvatar } from "./components/images";
-import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
+import { formatDate } from "@/lib/utils";
 
 export default function Home() {
-  const articles = [
-    {
-      title: "How to Write Engaging Blog Content",
-      content:
-        "In this guide, we break down actionable strategies for writing blog posts that capture attention...",
-      thumbnail: defaultArticle,
-      slug: "how-to-write-engaging-blog-content",
-      views: 120,
-      read_time: 5,
-      category: {
-        title: "Writing Tips",
-        thumbnail: "/images/writing.jpg",
-        slug: "writing-tips",
-      },
-      author: { full_name: "Jennifer Adga", image: defaultAvatar },
-    },
-    {
-      title: "10 Best Productivity Tools for Remote Work",
-      content:
-        "Working remotely requires the right tools. Here are 10 apps that can help boost your productivity...",
-      thumbnail: defaultArticle,
-      slug: "best-productivity-tools-remote-work",
-      views: 245,
-      read_time: 6,
-      category: { title: "Tech", thumbnail: "/images/tech.jpg", slug: "tech" },
-      author: { full_name: "David Lin", image: defaultAvatar },
-    },
-    {
-      title: "Mastering Minimalist Living",
-      content:
-        "Minimalism is more than just a trend — it’s a way of life. Learn how to embrace it step-by-step.",
-      thumbnail: defaultArticle,
-      slug: "mastering-minimalist-living",
-      views: 310,
-      read_time: 4,
-      category: {
-        title: "Lifestyle",
-        thumbnail: "/images/lifestyle.jpg",
-        slug: "lifestyle",
-      },
-      author: { full_name: "Amara Blake", image: defaultAvatar },
-    },
-    {
-      title: "Exploring the Future of AI in Everyday Life",
-      content:
-        "AI is already transforming the way we live. Here's what to expect in the next 5 years.",
-      thumbnail: defaultArticle,
-      slug: "future-of-ai-everyday-life",
-      views: 410,
-      read_time: 7,
-      category: {
-        title: "Technology",
-        thumbnail: "/images/ai.jpg",
-        slug: "technology",
-      },
-      author: { full_name: "Ethan Zhao", image: defaultAvatar },
-    },
-    {
-      title: "Simple Recipes for Busy Weeknights",
-      content:
-        "Short on time? These quick and easy meals will save your dinner routine.",
-      thumbnail: defaultArticle,
-      slug: "simple-weeknight-recipes",
-      views: 190,
-      read_time: 3,
-      category: { title: "Food", thumbnail: "/images/food.jpg", slug: "food" },
-      author: { full_name: "Nora Michaels", image: defaultAvatar },
-    },
-    {
-      title: "Beginner’s Guide to Investing in Crypto",
-      content:
-        "Curious about cryptocurrency but don’t know where to start? This guide covers the basics.",
-      thumbnail: defaultArticle,
-      slug: "beginners-guide-crypto-investing",
-      views: 270,
-      read_time: 6,
-      category: {
-        title: "Finance",
-        thumbnail: "/images/finance.jpg",
-        slug: "finance",
-      },
-      author: { full_name: "Luis Fernando", image: defaultAvatar },
-    },
-    {
-      title: "The Psychology Behind Great Branding",
-      content:
-        "Brands that stick in your mind aren't lucky — they're strategic. Here's why it works.",
-      thumbnail: defaultArticle,
-      slug: "psychology-of-great-branding",
-      views: 330,
-      read_time: 5,
-      category: {
-        title: "Marketing",
-        thumbnail: "/images/marketing.jpg",
-        slug: "marketing",
-      },
-      author: { full_name: "Claire Evans", image: defaultAvatar },
-    },
-    {
-      title: "Remote Freelancing: Myths vs Reality",
-      content:
-        "Freelancing from home sounds amazing, but it’s not always as easy as it seems. Here's the truth.",
-      thumbnail: defaultArticle,
-      slug: "remote-freelancing-myths-vs-reality",
-      views: 150,
-      read_time: 4,
-      category: {
-        title: "Career",
-        thumbnail: "/images/career.jpg",
-        slug: "career",
-      },
-      author: { full_name: "Marcus Reed", image: defaultAvatar },
-    },
-  ];
+  // const articles = [
+  //     {
+  //         title: "How to Write Engaging Blog Content",
+  //         content: "In this guide, we break down actionable strategies for writing blog posts that capture attention...",
+  //         thumbnail: defaultArticle,
+  //         slug: "how-to-write-engaging-blog-content",
+  //         views: 120,
+  //         read_time: 5,
+  //         category: { title: "Writing Tips", thumbnail: "/images/writing.jpg", slug: "writing-tips" },
+  //         author: { full_name: "Jennifer Adga", image: defaultAvatar },
+  //     },
+  //     {
+  //         title: "10 Best Productivity Tools for Remote Work",
+  //         content: "Working remotely requires the right tools. Here are 10 apps that can help boost your productivity...",
+  //         thumbnail: defaultArticle,
+  //         slug: "best-productivity-tools-remote-work",
+  //         views: 245,
+  //         read_time: 6,
+  //         category: { title: "Tech", thumbnail: "/images/tech.jpg", slug: "tech" },
+  //         author: { full_name: "David Lin", image: defaultAvatar },
+  //     },
+  //     {
+  //         title: "Mastering Minimalist Living",
+  //         content: "Minimalism is more than just a trend — it’s a way of life. Learn how to embrace it step-by-step.",
+  //         thumbnail: defaultArticle,
+  //         slug: "mastering-minimalist-living",
+  //         views: 310,
+  //         read_time: 4,
+  //         category: { title: "Lifestyle", thumbnail: "/images/lifestyle.jpg", slug: "lifestyle" },
+  //         author: { full_name: "Amara Blake", image: defaultAvatar },
+  //     },
+  //     {
+  //         title: "Exploring the Future of AI in Everyday Life",
+  //         content: "AI is already transforming the way we live. Here's what to expect in the next 5 years.",
+  //         thumbnail: defaultArticle,
+  //         slug: "future-of-ai-everyday-life",
+  //         views: 410,
+  //         read_time: 7,
+  //         category: { title: "Technology", thumbnail: "/images/ai.jpg", slug: "technology" },
+  //         author: { full_name: "Ethan Zhao", image: defaultAvatar },
+  //     },
+  //     {
+  //         title: "Simple Recipes for Busy Weeknights",
+  //         content: "Short on time? These quick and easy meals will save your dinner routine.",
+  //         thumbnail: defaultArticle,
+  //         slug: "simple-weeknight-recipes",
+  //         views: 190,
+  //         read_time: 3,
+  //         category: { title: "Food", thumbnail: "/images/food.jpg", slug: "food" },
+  //         author: { full_name: "Nora Michaels", image: defaultAvatar },
+  //     },
+  //     {
+  //         title: "Beginner’s Guide to Investing in Crypto",
+  //         content: "Curious about cryptocurrency but don’t know where to start? This guide covers the basics.",
+  //         thumbnail: defaultArticle,
+  //         slug: "beginners-guide-crypto-investing",
+  //         views: 270,
+  //         read_time: 6,
+  //         category: { title: "Finance", thumbnail: "/images/finance.jpg", slug: "finance" },
+  //         author: { full_name: "Luis Fernando", image: defaultAvatar },
+  //     },
+  //     {
+  //         title: "The Psychology Behind Great Branding",
+  //         content: "Brands that stick in your mind aren't lucky — they're strategic. Here's why it works.",
+  //         thumbnail: defaultArticle,
+  //         slug: "psychology-of-great-branding",
+  //         views: 330,
+  //         read_time: 5,
+  //         category: { title: "Marketing", thumbnail: "/images/marketing.jpg", slug: "marketing" },
+  //         author: { full_name: "Claire Evans", image: defaultAvatar },
+  //     },
+  //     {
+  //         title: "Remote Freelancing: Myths vs Reality",
+  //         content: "Freelancing from home sounds amazing, but it’s not always as easy as it seems. Here's the truth.",
+  //         thumbnail: defaultArticle,
+  //         slug: "remote-freelancing-myths-vs-reality",
+  //         views: 150,
+  //         read_time: 4,
+  //         category: { title: "Career", thumbnail: "/images/career.jpg", slug: "career" },
+  //         author: { full_name: "Marcus Reed", image: defaultAvatar },
+  //     },
+  // ];
+
+  const [mostPopularArticle, setMostPopularArticle] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchArticles = async () => {
+    setLoading(false);
+
+    const { data, error } = await supabase
+      .from("article")
+      .select(
+        `
+                id, title, content, thumbnail, date_created, views, read_time, slug,
+                category: category_id(title),
+                author: profile_id(full_name, image, job_title)
+            `,
+        { count: "exact" }
+      )
+      .order("date_created", { ascending: false });
+
+    if (error) {
+      console.log("Error fetching articles: ", error);
+    } else {
+      setArticles(data);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  useEffect(() => {
+    if (!articles?.length) return;
+
+    const popularArticle = articles?.reduce(
+      (max, article) => (article.views > max.views ? article : max),
+      articles[0]
+    );
+    setMostPopularArticle(popularArticle);
+  }, [articles]);
 
   return (
     <>
@@ -127,27 +142,29 @@ export default function Home() {
           <Image
             width={100}
             height={100}
-            src={defaultArticle}
+            src={mostPopularArticle?.thumbnail || defaultArticle}
             className="w-full h-full object-cover rounded-xl absolute"
             alt="Image title"
           />
           <div className="absolute bg-[#0b021bdb] w-full bottom-0 backdrop-blur-md rounded-xl p-3 space-y-3">
             <div className="inline-flex items-center gap-2 bg-indigo-500 p-1 w-auto text-xs me-2 rounded-full">
               <i className="fas fa-umbrella"></i>
-              <p>My Dick</p>
+              <p>{mostPopularArticle?.category?.title}</p>
             </div>
-            <h1 className="text-3xl font-bold drop-shadow-lg">My Ass</h1>
+            <h1 className="text-3xl font-bold drop-shadow-lg">
+              {mostPopularArticle?.title}
+            </h1>
             <div className="flex items-center gap-4 font-semibold">
               <Image
                 width={100}
                 height={100}
-                src={defaultAvatar}
+                src={mostPopularArticle?.author?.image || defaultAvatar}
                 className="w-8 h-8 object-cover rounded-full"
                 alt="Image title"
               />
-              <p>15/01/2004</p>
+              <p>{formatDate(mostPopularArticle?.date_created)}</p>
               <p>.</p>
-              <p>8 mins read</p>
+              <p>{mostPopularArticle?.read_time} mins read</p>
             </div>
           </div>
         </div>
@@ -185,7 +202,12 @@ export default function Home() {
 
       <section className="lg:px-33 px-5 lg:my-30 my-10">
         <div className="relative">
-          <h1 className="lg:text-7xl text-4xl font-bold">Hot Picks 🔥</h1>
+          <h1
+            className="lg:text-7xl text-4xl font-bold"
+            onClick={fetchArticles}
+          >
+            Hot Picks 🔥
+          </h1>
           <p>Latest breaking news, pictures, videos and special reports</p>
 
           <Image
