@@ -9,7 +9,7 @@ const sora = Sora({
 });
 
 export const metadata = {
-  title: "Bloggy - Read. Write. Learn",
+  title: "MK Blog - Read. Write. Learn",
   description: "Read. Write. Learn",
 };
 

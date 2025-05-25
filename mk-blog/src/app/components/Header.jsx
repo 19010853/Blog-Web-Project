@@ -88,7 +88,7 @@ const Header = () => {
       />
       <header className="flex flex-row justify-between items-center bg-indigo-800 my-5 mx-5 lg:mx-33 px-2 py-4 rounded-full">
         <Link href="/">
-          <h1 className="text-2xl lg:text-3xl font-bold ms-3">Bloggy</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold ms-3">MK Blog</h1>
         </Link>
         <Menubar
           className={
@@ -265,7 +265,7 @@ const Header = () => {
               className={`bg-[#07050D] border border-[#110c1f] text-white`}
             >
               <SheetHeader>
-                <SheetTitle className={"text-white"}>Bloggy</SheetTitle>
+                <SheetTitle className={"text-white"}>MK Blog</SheetTitle>
               </SheetHeader>
 
               <ul className="ms-2 space-y-7">

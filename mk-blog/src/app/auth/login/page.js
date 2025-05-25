@@ -42,7 +42,7 @@ export default function Login() {
           <div className="mb-10">
             <h1 className="lg:text-5xl text-4xl font-bold">Login 🔒</h1>
             <p className="font-normal text-sm mt-2">
-              Welcome back to bloggy, login to continue
+              Welcome back to MK Blog, login to continue
             </p>
           </div>
           <form onSubmit={handleLogin} className="space-y-5 relative">
