@@ -4,14 +4,9 @@
 This is a blog web project built with Next.js, a modern React framework that enables building high-performance and SEO-friendly web applications. The project provides a full-featured blog platform with a user-friendly interface.
 
 ## Key Features
-- 🚀 Built with Next.js 14
-- 💅 Modern UI with Tailwind CSS
-- 📱 Responsive design for all devices
-- 🔍 SEO optimized
-- ⚡ High performance with Server Components
-- 🔒 Security and user authentication
+- 🚀 Built with Next.js
+- 💅 Modern UI with Tailwind CSS and ShadcnUI
 - 📝 Blog content management system
-- 💾 Smart caching system
 - 🗄️ Supabase integration for database and authentication
 
 ## System Requirements
@@ -28,7 +23,18 @@ The project uses Supabase as its backend service, providing:
 - Storage for media files
 - Database backups
 
-![Database Schema](path-to-your-database-schema-image.png)
+![Database Schema](data-schema-image.png)
+
+### Database Setup
+1. Create a new project in Supabase
+2. Go to SQL Editor in your Supabase dashboard
+3. Import the database schema:
+   - Open the SQL file `data-postgresql-file.sql` in my project
+   - Copy the entire content
+   - Paste it into the SQL Editor in Supabase
+   - Click "Run" to execute the SQL commands
+
+This will create all necessary tables and relationships for the blog system.
 
 ## Installation
 
@@ -149,16 +155,8 @@ mk-blog/
 - Components can be customized in the `src/components` directory
 
 ## Demo Video
-[Demo video link will be updated later]
 
-## Contributing
-Contributions are welcome! Please feel free to submit issues or pull requests.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
-If you have any questions or suggestions, please create an issue in the repository or contact via email.
-
----
-Made with ❤️ by [Your Name] 
+If you have any questions or suggestions, please create an issue in the repository or contact via email khoinguyenminhk37@gmail.comcom
